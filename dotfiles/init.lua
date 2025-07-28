@@ -139,6 +139,7 @@ set_keymap("n", "J", "mzJ`z", { noremap = true })
 set_keymap("n", "N", "Nzzzv", { noremap = true })
 set_keymap("n", "<C-d>", "<C-d>zz", { noremap = true })
 set_keymap("n", "<C-u>", "<C-u>zz", { noremap = true })
+set_keymap('n', '<leader>gd', ':Gdiffsplit<CR>', { noremap = true, silent = true })
 vim.opt.laststatus = 2
 
 -- WSL yank support
@@ -162,6 +163,7 @@ vim.cmd [[
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'do': './install --bin' }
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+  Plug 'tpope/vim-fugitive'
   call plug#end()
 ]]
 
@@ -173,12 +175,39 @@ local function setup_harpoon()
     return
   end
   harpoon:setup()
-  set_keymap("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon: Add file" })
-  set_keymap("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon: Toggle menu" })
+  set_keymap("n", "<leader>af", function() harpoon:list():add() end, { desc = "Harpoon: Add file" })
+  set_keymap("n", "<C-y>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon: Toggle menu" })
   set_keymap("n", "<C-h>", function() harpoon:list():select(1) end, { desc = "Harpoon: Go to file 1" })
-  set_keymap("n", "<C-t>", function() harpoon:list():select(2) end, { desc = "Harpoon: Go to file 2" })
-  set_keymap("n", "<C-n>", function() harpoon:list():select(3) end, { desc = "Harpoon: Go to file 3" })
-  set_keymap("n", "<C-s>", function() harpoon:list():select(4) end, { desc = "Harpoon: Go to file 4" })
+  set_keymap("n", "<C-j>", function() harpoon:list():select(2) end, { desc = "Harpoon: Go to file 2" })
+  set_keymap("n", "<C-k>", function() harpoon:list():select(3) end, { desc = "Harpoon: Go to file 3" })
+  set_keymap("n", "<C-l>", function() harpoon:list():select(4) end, { desc = "Harpoon: Go to file 4" })
+  set_keymap("i", "<C-h>", function()
+  vim.cmd("stopinsert")
+  vim.schedule(function()
+    harpoon:list():select(1)
+  end)
+end, { desc = "Harpoon: Go to file 1 (insert)", noremap = true, silent = true })
+
+set_keymap("i", "<C-j>", function()
+  vim.cmd("stopinsert")
+  vim.schedule(function()
+    harpoon:list():select(2)
+  end)
+end, { desc = "Harpoon: Go to file 2 (insert)", noremap = true, silent = true })
+
+set_keymap("i", "<C-k>", function()
+  vim.cmd("stopinsert")
+  vim.schedule(function()
+    harpoon:list():select(3)
+  end)
+end, { desc = "Harpoon: Go to file 3 (insert)", noremap = true, silent = true })
+
+set_keymap("i", "<C-l>", function()
+  vim.cmd("stopinsert")
+  vim.schedule(function()
+    harpoon:list():select(4)
+  end)
+end, { desc = "Harpoon: Go to file 4 (insert)", noremap = true, silent = true })
 end
 
 -- FZF configuration
@@ -238,8 +267,3 @@ end
 setup_harpoon()
 setup_fzf()
 setup_coc()
-
--- Debug leader key
-vim.api.nvim_create_user_command("CheckLeader", function()
-  vim.api.nvim_echo({{ "Leader key is: " .. vim.g.mapleader, "Normal" }}, true, {})
-end, {})
