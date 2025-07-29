@@ -3,6 +3,9 @@
 ## environment
 
 ```
+sudo adduser rohman
+sudo usermod -aG sudo rohman
+su - rohman
 curl -fsSL https://pyenv.run | bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 \. "$HOME/.nvm/nvm.sh"
@@ -37,5 +40,7 @@ curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 mkdir $HOME/.config
 mkdir $HOME/.config/nvim
+cd $HOME/vimn
 cp ./dotfiles/init.lua $HOME/.config/nvim/init.lua
+cp ./dotfiles/.bashrc $HOME/.bashrc
 ```
